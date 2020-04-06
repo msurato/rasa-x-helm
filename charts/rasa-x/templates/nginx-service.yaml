@@ -11,6 +11,7 @@ metadata:
 {{- end }}
 spec:
   ports:
+  {{- if .Values.nginx.service.enableHttp }}
   - port: {{ .Values.nginx.service.port }}
     targetPort: 8080
     protocol: "TCP"
@@ -18,6 +19,16 @@ spec:
     {{- if .Values.nginx.service.nodePort }}
     nodePort: {{ .Values.nginx.service.nodePort }}
     {{- end }}
+  {{- end }}
+  {{- if .Values.nginx.service.enableHttps }}
+  - port: {{ .Values.nginx.service.httpsPort }}
+    targetPort: 8443
+    protocol: "TCP"
+    name: "https"
+    {{- if .Values.nginx.service.httpsNodePort }}
+    nodePort: {{ .Values.nginx.service.httpsNodePort }}
+    {{- end }}
+  {{- end }}
     {{- if .Values.nginx.service.externalIPs }}
   externalIPs: {{ .Values.nginx.service.externalIPs | toYaml | nindent 2 }}
     {{- end }}
